@@ -8,23 +8,37 @@ jobs:
     name: Build OpenList
     steps:
     - uses: actions/checkout@v4
-    - name: Build OpenList
-      uses: vmactions/freebsd-vm@v1
+
+    - name: Set up Go
+      uses: actions/setup-go@v4
       with:
-        usesh: true
-        release: 13.2
-        prepare: |
-          pkg install -y node wget curl git go121 gcc bash gawk gsed
-          pkg install -y npm
-          ln -s /usr/local/bin/go121 /usr/local/bin/go
-          npm install -g pnpm
-        run: |
-          export LATEST_APP=$(wget -qO- https://api.github.com/repos/OpenListTeam/OpenList/tags | gawk -F '["v]' '/name/{print "v"$5;exit}')
-          git clone -b $LATEST_APP https://github.com/OpenListTeam/OpenList
-          git clone --recurse-submodules https://github.com/OpenListTeam/OpenList-Frontend.git
-          cd OpenList-Frontend && pnpm install && pnpm build && cp -rf dist/ ../OpenList/public/
+        go-version: 'stable'
+        check-latest: true
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        
+    - name: Clone Repo
+      run: |
+        export LATEST_APP=$(wget -qO- https://api.github.com/repos/OpenListTeam/OpenList/tags | gawk -F '["v]' '/name/{print "v"$5;exit}')
+        git clone -b $LATEST_APP https://github.com/OpenListTeam/OpenList
+        git clone --recurse-submodules https://github.com/OpenListTeam/OpenList-Frontend.git
+        npm install -g pnpm
+        
+    - name: Build Frontend
+      run: |
+          cd OpenList-Frontend
+          pnpm install && pnpm build
+          cp -rf dist/ ../OpenList/public/
           cd ../Openlist/public/ && ls
-          cd .. && bash ../build.sh
+          
+    - name: Build binary
+      run: |
+        cd ..
+        GOOS=freebsd GOARCH=amd64 CGO_ENABLED=0 bash ../build.sh
+        ls
           
     - name: Upload artifact
       uses: actions/upload-artifact@main
