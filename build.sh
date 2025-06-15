@@ -20,4 +20,4 @@ ldflags="\
 -X 'github.com/OpenListTeam/OpenList/internal/conf.WebVersion=$webVersion' \
 "
 
-go build -ldflags="$ldflags" -tags=jsoniter .
+go build -ldflags="$ldflags" .
