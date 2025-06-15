@@ -58,7 +58,7 @@ jobs:
       with:
         tag_name: ${{ steps.tag.outputs.release_tag }}
         files: |
-              OpenList/OpenList
+              OpenList/alist
               
     - name: Delete workflow runs
       uses: Mattraks/delete-workflow-runs@v2
