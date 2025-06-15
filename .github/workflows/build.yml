@@ -32,12 +32,12 @@ jobs:
           cd OpenList-Frontend
           pnpm install && pnpm build
           cd ..
-          cp -rf ./OpenList-Frontend/dist ./OpenList/public/dist
+          cp -rf ./OpenList-Frontend/dist ./OpenList/public
           cd OpenList/public/dist && ls
           
     - name: Build binary
       run: |
-        cd ..
+        cd ../..
         GOOS=freebsd GOARCH=amd64 CGO_ENABLED=0 bash ../build.sh
         ls
           
