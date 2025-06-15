@@ -33,7 +33,7 @@ jobs:
           pnpm install && pnpm build
           cd ..
           cp -rf ./OpenList-Frontend/dist ./OpenList/public/dist
-          cd Openlist/public && ls
+          cd OpenList/public/dist && ls
           
     - name: Build binary
       run: |
