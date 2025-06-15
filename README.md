@@ -1,2 +1,2 @@
-# alist-freebsd
-Automatically build alist (FreeBSD version)
+# openlist-freebsd
+Automatically build openlist (FreeBSD version)
