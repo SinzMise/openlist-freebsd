@@ -20,7 +20,7 @@ jobs:
       with:
         node-version: 20
         
-    - name: Clone Repo
+    - name: Clone Repo && Install pnpm
       run: |
         export LATEST_APP=$(wget -qO- https://api.github.com/repos/OpenListTeam/OpenList/tags | gawk -F '["v]' '/name/{print "v"$5;exit}')
         git clone -b $LATEST_APP https://github.com/OpenListTeam/OpenList
@@ -31,8 +31,9 @@ jobs:
       run: |
           cd OpenList-Frontend
           pnpm install && pnpm build
-          cp -rf dist/ ../OpenList/public/
-          cd ../Openlist/public/ && ls
+          cd ..
+          cp -rf ./OpenList-Frontend/dist ./OpenList/public/dist
+          cd Openlist/public/ && ls
           
     - name: Build binary
       run: |
