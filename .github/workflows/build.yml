@@ -29,17 +29,15 @@ jobs:
         
     - name: Build Frontend
       run: |
-          cp -rf build.sh ./OpenList/
           cd OpenList-Frontend
           pnpm install && pnpm build
           cd ..
           cp -rf ./OpenList-Frontend/dist ./OpenList/public
-          cd OpenList/public/dist && ls
           
     - name: Build binary
       run: |
-        cd ../.. && ls
-        GOOS=freebsd GOARCH=amd64 CGO_ENABLED=0 bash build.sh
+        cd OpenList
+        GOOS=freebsd GOARCH=amd64 CGO_ENABLED=0 bash ../build.sh
         ls
           
     - name: Upload artifact
